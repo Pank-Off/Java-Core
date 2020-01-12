@@ -1,0 +1,38 @@
+package HomeWork3.Collection;
+
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        //Задание 1
+        List<String> list = new ArrayList<>(Arrays.asList("Москва", "Санкт - Петербург", "Казань", "Москва", "Dick", "Рим", "Уфа", "Мурманск", "Москва", "Рим", "Санкт - Петербург", "Тверь","Тула", "Серпухов","Тула"));
+        System.out.println(list);
+        Map<String, Integer> count = new HashMap<>();
+        for (String s : list) {
+            count.put(s, count.getOrDefault(s, 0) + 1); //Возвращает значение, которое соответствует ключу; или значение по умолчанию.
+        }
+        System.out.println(count);
+        for (Map.Entry<String, Integer> o : count.entrySet()) {
+            System.out.println(o.getKey() + " встречается " + o.getValue() + " раз");
+        }
+
+        //Задание 2
+        PhoneBook book1 = new PhoneBook();
+
+        book1.add("Иванов",9856);
+        book1.add("Петров",123);
+        book1.add("Пупкин",1987);
+        book1.add("Пупкин",1945);
+        book1.add("Петров",187);
+        book1.add("Иванов",45648);
+        book1.add("Пупкин",19);
+        book1.add("Путин",999);
+        book1.add("Иванов", 834);
+        book1.get("Иванов");
+        book1.get("Шишкин");
+        book1.get("Петров");
+        book1.get("Пупкин");
+        System.out.println(book1);
+    }
+}
