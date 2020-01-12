@@ -1,0 +1,37 @@
+package HomeWork3.Collection;
+
+import java.util.*;
+
+public class PhoneBook{
+    private Map<String, List<Integer>> book = new TreeMap<>();
+    void add(String name, int number)
+    {
+        if(!book.containsKey(name))
+        {
+            book.put(name, new ArrayList<>());
+        }
+        book.get(name).add(number);
+    }
+
+    List<Integer> get(String name)
+    {
+        if(book.get(name)==null) {
+            System.out.println(name + " не существует в телефонной книги");
+            return null;
+        }
+        System.out.println("По фамилии " + name + " имеются номера: ");
+        for(int i: book.get(name))
+            System.out.println(i);
+        return book.get(name);
+    }
+
+    @Override
+    public String toString(){
+        System.out.println("Список номеров: ");
+        for(Map.Entry<String, List<Integer>> o:book.entrySet())
+        {
+            System.out.println(o.getKey() + ": " + o.getValue());
+        }
+        return "";
+    }
+}
