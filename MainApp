@@ -1,0 +1,53 @@
+package com.geekbrains.chat.server;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+//1. Если несколько клиентов подключаться к серверу, тогда DataInputStream и DataOutputStream будет для каждого клиента отдельные?
+//   То есть они связывают потоками ввода ввывода клиента и сервер? что то типа:
+//   Socket socket1 = serverSocket.accept();
+//   DataInputStream in1 = new DataInputStream(socket1.getInputStream());
+//   DataOutputStream out1 = new DataOutputStream(socket1.getOutputStream());
+//   Socket socket2 = serverSocket.accept();
+//   DataInputStream in2 = new DataInputStream(socket2.getInputStream());
+//   DataOutputStream out2 = new DataOutputStream(socket2.getOutputStream());
+
+//2. Метод initialize и implements Initializable - зачем
+
+//3. И еще раз про запуск потока в методе initialize
+
+//4. Platform.runLater?
+
+//5. Как подключить ActionListener на закрытие окна? Чтобы при этом соединение закрывалось
+
+//6. Структура Maven
+
+public class MainApp {
+    // Домашнее задание:
+    // 1. Разобраться с кодом. Задать вопросы что непонятно;
+    // 2. Если клиент посылает сообщение '/end', то сервер должен закрыть соединение
+    // и завершить работу, а клиент должен закрыть соединение с сервером со своей стороны.
+
+    public static void main(String[] args) {
+        try (ServerSocket serverSocket = new ServerSocket(8189)) {
+            System.out.println("Сервер запущен. Ожидаем подключения клиентов...");
+            Socket socket = serverSocket.accept();
+            System.out.println("Клиент подключился");
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            while (true) {
+                String msg = in.readUTF();
+                System.out.print("Сообщение от клиента: " + msg + "\n");
+                if(msg.equals("/end")){
+                    throw new IOException();
+                }
+                out.writeUTF("echo: " + msg);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
