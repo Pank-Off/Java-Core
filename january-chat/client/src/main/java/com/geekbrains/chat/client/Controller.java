@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -64,48 +64,16 @@ public class Controller implements Initializable {
             network = new Network(8189);
             Thread t = new Thread(() -> {
                 try {
-                    while (true) {
-                        String msg = network.readMsg();
-                        if (msg.startsWith("/authok ")) { // /authok nick1
-                            nickname = msg.split(" ")[1];
-                            textArea.appendText("Вы зашли в чат под ником: " + nickname + "\n");
-                            setAuthenticated(true);
-                            break;
-                        }
-                        textArea.appendText(msg + "\n");
-                    }
-                    while (true) {
-                        String msg = network.readMsg();
-                        if (msg.startsWith("/")) {
-                            if (msg.equals("/end_confirm")) {
-                                textArea.appendText("Завершено общение с сервером\n");
-                                break;
-                            }
-                            if(msg.startsWith("/change_nick_OK ")){
-                                nickname = msg.split(" ")[1];
-                                textArea.appendText("Новый ник: " + nickname + "\n");
-                            }
-                            if (msg.startsWith("/clients_list ")) { // '/clients_list user1 user2 user3'
-                                Platform.runLater(() -> {
-                                    clientsList.getItems().clear();
-                                    String[] tokens = msg.split(" ");
-                                    for (int i = 1; i < tokens.length; i++) {
-                                        if (!nickname.equals(tokens[i])) {
-                                            clientsList.getItems().add(tokens[i]);
-                                        }
-                                    }
-                                });
-                            }
-                        } else {
-                            textArea.appendText(msg + "\n");
-                        }
-                    }
+                    authClient();  // цикл аутентификации
+                    ClientTetATetServ(); // цикл общения с сервером (обмен текстовыми сообщениями и командами)
                 } catch (IOException e) {
                     Platform.runLater(() -> {
                         Alert alert = new Alert(Alert.AlertType.WARNING, "Соединение с сервером разорвано", ButtonType.OK);
                         alert.showAndWait();
                     });
-                } finally {
+                }
+                finally
+                {
                     network.close();
                     setAuthenticated(false);
                     nickname = null;
@@ -116,6 +84,60 @@ public class Controller implements Initializable {
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Невозможно подключиться к серверу", ButtonType.OK);
             alert.showAndWait();
+        }
+    }
+
+    private void ClientTetATetServ() throws IOException {
+        while (true) {
+            String msg = network.readMsg();
+            if (msg.startsWith("/")) {
+                if (msg.equals("/end_confirm")) {
+                    textArea.appendText("Завершено общение с сервером\n");
+                    break;
+                }
+                if (msg.startsWith("/change_nick_OK ")) {
+                    nickname = msg.split(" ")[1];
+                    textArea.appendText("Новый ник: " + nickname + "\n");
+                }
+                if (msg.startsWith("/clients_list ")) { // '/clients_list user1 user2 user3'
+                    Platform.runLater(() -> {
+                        clientsList.getItems().clear();
+                        String[] tokens = msg.split(" ");
+                        for (int i = 1; i < tokens.length; i++) {
+                            if (!nickname.equals(tokens[i])) {
+                                clientsList.getItems().add(tokens[i]);
+                            }
+                        }
+                    });
+                }
+            } else {
+                textArea.appendText(msg + "\n");
+                try (OutputStream out = new BufferedOutputStream(new FileOutputStream("client/history_" + nickname + ".txt", true))) {
+                    out.write(textArea.getText().getBytes());
+                }
+            }
+        }
+    }
+
+    private void authClient() throws IOException, EOFException {
+        while (true) {
+            String msg = network.readMsg();
+            if (msg.startsWith("/authok ")) { // /authok nick1
+                nickname = msg.split(" ")[1];
+                textArea.clear();
+                textArea.appendText("Вы зашли в чат под ником: " + nickname + "\n");
+                setAuthenticated(true);
+                try (BufferedReader in = new BufferedReader(new FileReader("client/history_" + nickname + ".txt"))) {
+                    String str;
+                    while ((str = in.readLine()) != null) {
+                        //str.concat(in.readLine()); Как сформировать полноценную строку из файла?
+                        //textArea.appendText(String.valueOf((char) x)); NullPointerException
+                        textArea.setText(str);
+                    }
+                }
+                break;
+            }
+            textArea.appendText(msg + "\n");
         }
     }
 
