@@ -9,8 +9,10 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -64,48 +66,16 @@ public class Controller implements Initializable {
             network = new Network(8189);
             Thread t = new Thread(() -> {
                 try {
-                    while (true) {
-                        String msg = network.readMsg();
-                        if (msg.startsWith("/authok ")) { // /authok nick1
-                            nickname = msg.split(" ")[1];
-                            textArea.appendText("Вы зашли в чат под ником: " + nickname + "\n");
-                            setAuthenticated(true);
-                            break;
-                        }
-                        textArea.appendText(msg + "\n");
-                    }
-                    while (true) {
-                        String msg = network.readMsg();
-                        if (msg.startsWith("/")) {
-                            if (msg.equals("/end_confirm")) {
-                                textArea.appendText("Завершено общение с сервером\n");
-                                break;
-                            }
-                            if(msg.startsWith("/change_nick_OK ")){
-                                nickname = msg.split(" ")[1];
-                                textArea.appendText("Новый ник: " + nickname + "\n");
-                            }
-                            if (msg.startsWith("/clients_list ")) { // '/clients_list user1 user2 user3'
-                                Platform.runLater(() -> {
-                                    clientsList.getItems().clear();
-                                    String[] tokens = msg.split(" ");
-                                    for (int i = 1; i < tokens.length; i++) {
-                                        if (!nickname.equals(tokens[i])) {
-                                            clientsList.getItems().add(tokens[i]);
-                                        }
-                                    }
-                                });
-                            }
-                        } else {
-                            textArea.appendText(msg + "\n");
-                        }
-                    }
+                    authClient();  // цикл аутентификации
+                    ClientTetATetServ(); // цикл общения с сервером (обмен текстовыми сообщениями и командами)
                 } catch (IOException e) {
                     Platform.runLater(() -> {
                         Alert alert = new Alert(Alert.AlertType.WARNING, "Соединение с сервером разорвано", ButtonType.OK);
                         alert.showAndWait();
                     });
-                } finally {
+                }
+                finally
+                {
                     network.close();
                     setAuthenticated(false);
                     nickname = null;
@@ -116,6 +86,74 @@ public class Controller implements Initializable {
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.WARNING, "Невозможно подключиться к серверу", ButtonType.OK);
             alert.showAndWait();
+        }
+    }
+
+    private void ClientTetATetServ() throws IOException {
+        while (true) {
+            String msg = network.readMsg();
+            if (msg.startsWith("/")) {
+                if (msg.equals("/end_confirm")) {
+                    textArea.appendText("Завершено общение с сервером\n");
+                    break;
+                }
+                if (msg.startsWith("/change_nick_OK ")) {
+                    nickname = msg.split(" ")[1];
+                    textArea.appendText("Новый ник: " + nickname + "\n");
+                }
+                if (msg.startsWith("/clients_list ")) { // '/clients_list user1 user2 user3'
+                    Platform.runLater(() -> {
+                        clientsList.getItems().clear();
+                        String[] tokens = msg.split(" ");
+                        for (int i = 1; i < tokens.length; i++) {
+                            if (!nickname.equals(tokens[i])) {
+                                clientsList.getItems().add(tokens[i]);
+                            }
+                        }
+                    });
+                }
+            } else {
+                textArea.appendText(msg + "\n");
+                try (OutputStream out = new BufferedOutputStream(new FileOutputStream("client/history_" + nickname + ".txt",true))) {
+                    out.write((msg + "\n").getBytes());
+                    //out.write(textArea.getText().getBytes());
+                }
+            }
+        }
+    }
+
+    private void authClient() throws IOException {
+        while (true) {
+            String msg = network.readMsg();
+            if (msg.startsWith("/authok ")) { // /authok nick1
+                nickname = msg.split(" ")[1];
+                textArea.clear();
+                textArea.appendText("Вы зашли в чат под ником: " + nickname + "\n");
+                setAuthenticated(true);
+                File history = new File("client/history_" + nickname + ".txt");
+                if(!history.exists())
+                    history.createNewFile();
+                try (BufferedReader in = new BufferedReader(new FileReader("client/history_" + nickname + ".txt"))) {
+                    String str;
+                    List<String> list = new ArrayList<>();
+                        while((str = in.readLine())!=null) {
+                            list.add(str);
+                        }
+                        //str.concat(in.readLine()); НИ В КОЕМ СЛУЧАЕ. ПАМЯТЬ УЛЕТИТ СРАЗУ.
+                        //строка иммутабельна, создается новая строка при каждой конкатенации
+                    boolean count=true;
+                    for(int i = list.size()-10;i<list.size();i++){
+                        if (list.size() < 10 && count) {
+                            i = 0; count = false;
+                            if(list.isEmpty())
+                                break;
+                        }
+                        textArea.appendText(list.get(i) + "\n");
+                    }
+                }
+                break;
+            }
+            textArea.appendText(msg + "\n");
         }
     }
 

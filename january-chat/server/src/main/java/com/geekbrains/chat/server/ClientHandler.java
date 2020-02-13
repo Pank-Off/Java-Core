@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ClientHandler {
     private Server server;
@@ -21,59 +23,79 @@ public class ClientHandler {
         this.socket = socket;
         this.in = new DataInputStream(socket.getInputStream());
         this.out = new DataOutputStream(socket.getOutputStream());
-        new Thread(() -> {
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        executorService.execute(() -> {
             try {
-                while (true) { // цикл аутентификации
-                    String msg = in.readUTF();
-                    System.out.print("Сообщение от клиента: " + msg + "\n");
-                    if (msg.startsWith("/auth ")) { // /auth login1 pass1
-                        String[] tokens = msg.split(" ", 3);
-                        String nickFromAuthManager = server.getAuthManager().getNicknameByLoginAndPassword(tokens[1], tokens[2]);
-                        if (nickFromAuthManager != null) {
-                            if (server.isNickBusy(nickFromAuthManager)) {
-                                sendMsg("Данный пользователь уже в чате");
-                                continue;
-                            }
-                            nickname = nickFromAuthManager;
-                            sendMsg("/authok " + nickname);
-                            server.subscribe(this);
-                            break;
-                        } else {
-                            sendMsg("Указан неверный логин/пароль");
-                        }
-                    }
-                }
-                while (true) { // цикл общения с сервером (обмен текстовыми сообщениями и командами)
-                    String msg = in.readUTF();
-                    System.out.print("Сообщение от клиента: " + msg + "\n");
-                    if (msg.startsWith("/")) {
-                        if (msg.startsWith("/w ")) {
-                            String[] tokens = msg.split(" ", 3); // /w user2 hello, user2
-                            server.sendPrivateMsg(this, tokens[1], tokens[2]);
-                            continue;
-                        }
-                        if(msg.startsWith("/change_nick ")){
-                            String[] tokens = msg.split(" ", 2); // /w user2 hello, user2
-                            server.getAuthManager().changeNick(nickname, tokens[1]);
-                            nickname = tokens[1];
-                            sendMsg("/change_nick_OK " + nickname);
-                            server.broadcastClientsList();
+            authServ(); // цикл аутентификации
+            servTetATetClient(); // цикл общения с сервером (обмен текстовыми сообщениями и командами)
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            close();
+        }
+    });
+        executorService.shutdown();
+//        new Thread(() -> {
+//            try {
+//                authServ(); // цикл аутентификации
+//                servTetATetClient(); // цикл общения с сервером (обмен текстовыми сообщениями и командами)
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } finally {
+//                close();
+//            }
+//        }).start();
+    }
 
-                        }
-                        if (msg.equals("/end")) {
-                            sendMsg("/end_confirm");
-                            break;
-                        }
-                    } else {
-                        server.broadcastMsg(nickname + ": " + msg, true);
-                    }
+    private void servTetATetClient() throws IOException {
+        while (true) {
+            String msg = in.readUTF();
+            System.out.print("Сообщение от клиента: " + msg + "\n");
+            if (msg.startsWith("/")) {
+                if (msg.startsWith("/w ")) {
+                    String[] tokens = msg.split(" ", 3); // /w user2 hello, user2
+                    server.sendPrivateMsg(this, tokens[1], tokens[2]);
+                    continue;
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                close();
+                if(msg.startsWith("/change_nick ")){
+                    String[] tokens = msg.split(" ", 2); // /w user2 hello, user2
+                    server.getAuthManager().changeNick(nickname, tokens[1]);
+                    nickname = tokens[1];
+                    sendMsg("/change_nick_OK " + nickname);
+                    server.broadcastClientsList();
+
+                }
+                if (msg.equals("/end")) {
+                    sendMsg("/end_confirm");
+                    break;
+                }
+            } else {
+                server.broadcastMsg(nickname + ": " + msg, true);
             }
-        }).start();
+        }
+    }
+
+    private void authServ() throws IOException {
+        while (true) {
+            String msg = in.readUTF();
+            System.out.print("Сообщение от клиента: " + msg + "\n");
+            if (msg.startsWith("/auth ")) { // /auth login1 pass1
+                String[] tokens = msg.split(" ", 3);
+                String nickFromAuthManager = server.getAuthManager().getNicknameByLoginAndPassword(tokens[1], tokens[2]);
+                if (nickFromAuthManager != null) {
+                    if (server.isNickBusy(nickFromAuthManager)) {
+                        sendMsg("Данный пользователь уже в чате");
+                        continue;
+                    }
+                    nickname = nickFromAuthManager;
+                    sendMsg("/authok " + nickname);
+                    server.subscribe(this);
+                    break;
+                } else {
+                    sendMsg("Указан неверный логин/пароль");
+                }
+            }
+        }
     }
 
     public void sendMsg(String msg) {
