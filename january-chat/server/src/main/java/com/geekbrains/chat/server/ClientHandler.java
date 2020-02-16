@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,6 +14,7 @@ public class ClientHandler {
     private DataInputStream in;
     private DataOutputStream out;
     private String nickname;
+    private static ExecutorService service = Executors.newFixedThreadPool(3);
 
     public String getNickname() {
         return nickname;
@@ -23,18 +25,21 @@ public class ClientHandler {
         this.socket = socket;
         this.in = new DataInputStream(socket.getInputStream());
         this.out = new DataOutputStream(socket.getOutputStream());
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
-        executorService.execute(() -> {
+
+//При создании пула потока, программа не позволит создать больше фиксированного числа потоков
+//В данной ситуации, больших преимуществ неувидел, ну разве что наверное
+//повысится устойчивость системы, скажем, мы таким образом предотвращаем перегрузку сервера.
+        service.execute(() -> {
             try {
-            authServ(); // цикл аутентификации
-            servTetATetClient(); // цикл общения с сервером (обмен текстовыми сообщениями и командами)
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            close();
-        }
-    });
-        executorService.shutdown();
+                authServ(); // цикл аутентификации
+                servTetATetClient(); // цикл общения с сервером (обмен текстовыми сообщениями и командами)
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                close();
+            }
+        });
+
 //        new Thread(() -> {
 //            try {
 //                authServ(); // цикл аутентификации
@@ -57,7 +62,7 @@ public class ClientHandler {
                     server.sendPrivateMsg(this, tokens[1], tokens[2]);
                     continue;
                 }
-                if(msg.startsWith("/change_nick ")){
+                if (msg.startsWith("/change_nick ")) {
                     String[] tokens = msg.split(" ", 2); // /w user2 hello, user2
                     server.getAuthManager().changeNick(nickname, tokens[1]);
                     nickname = tokens[1];

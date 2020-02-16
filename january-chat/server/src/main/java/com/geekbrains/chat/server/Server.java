@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
     private AuthManager authManager;
@@ -24,15 +26,17 @@ public class Server {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Сервер запущен. Ожидаем подключения клиентов...");
             while (true) {
-                Socket socket = serverSocket.accept();
+                Socket socket = null;
+                socket = serverSocket.accept();
                 System.out.println("Клиент подключился");
                 new ClientHandler(this, socket);
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             DataBase.disconnect();
         }
+
     }
 
     public void broadcastMsg(String msg, boolean withDateTime) {
@@ -86,7 +90,7 @@ public class Server {
 
     public synchronized void unsubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);
-        if(!clientHandler.getNickname().equals("null"))
+        if (!clientHandler.getNickname().equals("null"))
             broadcastMsg(clientHandler.getNickname() + " вышел из чата", false);
         broadcastClientsList();
     }
