@@ -1,0 +1,146 @@
+INFO  2020-02-23 12:46:31 [main] (Server.java:33) - Сервер запущен. Ожидаем подключения клиентов...
+INFO  2020-02-23 12:47:03 [main] (Server.java:33) - Сервер запущен. Ожидаем подключения клиентов...
+INFO  2020-02-23 12:48:20 [main] (Server.java:33) - Сервер запущен. Ожидаем подключения клиентов...
+INFO  2020-02-23 12:48:44 [main] (Server.java:36) - Клиент подключился
+INFO  2020-02-23 12:48:44 [pool-2-thread-1] (ClientHandler.java:84) - Сообщение от клиента: /auth login1 pass1
+INFO  2020-02-23 12:48:51 [main] (Server.java:36) - Клиент подключился
+INFO  2020-02-23 12:48:51 [pool-2-thread-2] (ClientHandler.java:84) - Сообщение от клиента: /auth login2 pass2
+INFO  2020-02-23 12:48:54 [pool-2-thread-2] (ClientHandler.java:56) - Сообщение от клиента: afa
+INFO  2020-02-23 12:48:56 [pool-2-thread-2] (ClientHandler.java:56) - Сообщение от клиента: привет
+INFO  2020-02-23 12:48:59 [pool-2-thread-2] (ClientHandler.java:56) - Сообщение от клиента: /w Роман зар
+INFO  2020-02-23 12:49:03 [pool-2-thread-1] (ClientHandler.java:56) - Сообщение от клиента: дароу
+INFO  2020-02-23 12:49:06 [pool-2-thread-1] (ClientHandler.java:56) - Сообщение от клиента: /w Коля колян
+INFO  2020-02-23 12:49:09 [pool-2-thread-1] (ClientHandler.java:56) - Сообщение от клиента: /end
+INFO  2020-02-23 12:49:16 [main] (Server.java:36) - Клиент подключился
+INFO  2020-02-23 12:49:16 [pool-2-thread-3] (ClientHandler.java:84) - Сообщение от клиента: /auth login3 pass3
+INFO  2020-02-23 12:49:20 [pool-2-thread-3] (ClientHandler.java:56) - Сообщение от клиента: привет
+ERROR 2020-02-23 12:49:22 [pool-2-thread-3] (ClientHandler.java:35) - Throwing
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:210) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:224) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUnsignedShort(DataInputStream.java:337) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:589) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:564) ~[?:1.8.0_231]
+	at com.geekbrains.chat.server.ClientHandler.servTetATetClient(ClientHandler.java:55) ~[classes/:?]
+	at com.geekbrains.chat.server.ClientHandler.lambda$new$0(ClientHandler.java:33) ~[classes/:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [?:1.8.0_231]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [?:1.8.0_231]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_231]
+ERROR 2020-02-23 12:49:24 [pool-2-thread-2] (ClientHandler.java:35) - Throwing
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:210) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:224) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUnsignedShort(DataInputStream.java:337) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:589) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:564) ~[?:1.8.0_231]
+	at com.geekbrains.chat.server.ClientHandler.servTetATetClient(ClientHandler.java:55) ~[classes/:?]
+	at com.geekbrains.chat.server.ClientHandler.lambda$new$0(ClientHandler.java:33) ~[classes/:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [?:1.8.0_231]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [?:1.8.0_231]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_231]
+INFO  2020-02-23 13:05:54 [main] (Server.java:33) - Сервер запущен. Ожидаем подключения клиентов...
+INFO  2020-02-23 13:06:34 [main] (Server.java:36) - Клиент подключился
+INFO  2020-02-23 13:06:34 [pool-2-thread-1] (ClientHandler.java:84) - Сообщение от клиента: /auth login1 pass1
+INFO  2020-02-23 13:06:41 [main] (Server.java:36) - Клиент подключился
+INFO  2020-02-23 13:06:41 [pool-2-thread-2] (ClientHandler.java:84) - Сообщение от клиента: /auth login2 pass2
+INFO  2020-02-23 13:07:09 [main] (Server.java:36) - Клиент подключился
+INFO  2020-02-23 13:07:09 [pool-2-thread-3] (ClientHandler.java:84) - Сообщение от клиента: /auth login3 pass3
+INFO  2020-02-23 13:07:18 [pool-2-thread-3] (ClientHandler.java:56) - Сообщение от клиента: jhkjh
+ERROR 2020-02-23 13:07:21 [pool-2-thread-2] (ClientHandler.java:35) - Throwing
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:210) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:224) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUnsignedShort(DataInputStream.java:337) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:589) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:564) ~[?:1.8.0_231]
+	at com.geekbrains.chat.server.ClientHandler.servTetATetClient(ClientHandler.java:55) ~[classes/:?]
+	at com.geekbrains.chat.server.ClientHandler.lambda$new$0(ClientHandler.java:33) ~[classes/:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [?:1.8.0_231]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [?:1.8.0_231]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_231]
+INFO  2020-02-23 13:07:37 [main] (Server.java:36) - Клиент подключился
+INFO  2020-02-23 13:07:37 [pool-2-thread-2] (ClientHandler.java:84) - Сообщение от клиента: /auth login2 pass2
+INFO  2020-02-23 13:07:46 [pool-2-thread-1] (ClientHandler.java:56) - Сообщение от клиента: /w Коля asda
+INFO  2020-02-23 13:07:50 [pool-2-thread-1] (ClientHandler.java:56) - Сообщение от клиента: /w Ольга привет
+INFO  2020-02-23 13:07:55 [pool-2-thread-3] (ClientHandler.java:56) - Сообщение от клиента: ривет
+INFO  2020-02-23 13:08:01 [pool-2-thread-2] (ClientHandler.java:56) - Сообщение от клиента: /end
+INFO  2020-02-23 13:08:03 [main] (Server.java:36) - Клиент подключился
+INFO  2020-02-23 13:08:03 [pool-2-thread-2] (ClientHandler.java:84) - Сообщение от клиента: /auth  
+ERROR 2020-02-23 13:08:05 [pool-2-thread-2] (ClientHandler.java:35) - Throwing
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:210) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:224) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUnsignedShort(DataInputStream.java:337) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:589) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:564) ~[?:1.8.0_231]
+	at com.geekbrains.chat.server.ClientHandler.authServ(ClientHandler.java:83) ~[classes/:?]
+	at com.geekbrains.chat.server.ClientHandler.lambda$new$0(ClientHandler.java:32) ~[classes/:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [?:1.8.0_231]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [?:1.8.0_231]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_231]
+ERROR 2020-02-23 13:08:06 [pool-2-thread-3] (ClientHandler.java:35) - Throwing
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:210) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:224) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUnsignedShort(DataInputStream.java:337) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:589) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:564) ~[?:1.8.0_231]
+	at com.geekbrains.chat.server.ClientHandler.servTetATetClient(ClientHandler.java:55) ~[classes/:?]
+	at com.geekbrains.chat.server.ClientHandler.lambda$new$0(ClientHandler.java:33) ~[classes/:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [?:1.8.0_231]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [?:1.8.0_231]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_231]
+ERROR 2020-02-23 13:08:07 [pool-2-thread-1] (ClientHandler.java:35) - Throwing
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:210) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:224) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUnsignedShort(DataInputStream.java:337) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:589) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:564) ~[?:1.8.0_231]
+	at com.geekbrains.chat.server.ClientHandler.servTetATetClient(ClientHandler.java:55) ~[classes/:?]
+	at com.geekbrains.chat.server.ClientHandler.lambda$new$0(ClientHandler.java:33) ~[classes/:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [?:1.8.0_231]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [?:1.8.0_231]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_231]
+INFO  2020-02-23 13:08:20 [main] (Server.java:33) - Сервер запущен. Ожидаем подключения клиентов...
+INFO  2020-02-23 13:08:38 [main] (Server.java:36) - Клиент подключился
+INFO  2020-02-23 13:08:38 [pool-2-thread-1] (ClientHandler.java:84) - Сообщение от клиента: /auth login2 pass2
+INFO  2020-02-23 13:09:05 [pool-2-thread-1] (ClientHandler.java:56) - Сообщение от клиента: /change_nick Роман
+INFO  2020-02-23 13:09:08 [pool-2-thread-1] (ClientHandler.java:56) - Сообщение от клиента: привет
+INFO  2020-02-23 13:09:22 [pool-2-thread-1] (ClientHandler.java:56) - Сообщение от клиента: /change_nick Алексей
+INFO  2020-02-23 13:09:24 [pool-2-thread-1] (ClientHandler.java:56) - Сообщение от клиента: ривет
+ERROR 2020-02-23 13:09:29 [pool-2-thread-1] (ClientHandler.java:35) - Throwing
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:210) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:224) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUnsignedShort(DataInputStream.java:337) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:589) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:564) ~[?:1.8.0_231]
+	at com.geekbrains.chat.server.ClientHandler.servTetATetClient(ClientHandler.java:55) ~[classes/:?]
+	at com.geekbrains.chat.server.ClientHandler.lambda$new$0(ClientHandler.java:33) ~[classes/:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [?:1.8.0_231]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [?:1.8.0_231]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_231]
+INFO  2020-02-23 13:09:50 [main] (Server.java:36) - Клиент подключился
+INFO  2020-02-23 13:09:50 [pool-2-thread-2] (ClientHandler.java:84) - Сообщение от клиента: /auth login2 pass2
+INFO  2020-02-23 13:09:54 [pool-2-thread-2] (ClientHandler.java:56) - Сообщение от клиента: привет
+ERROR 2020-02-23 13:09:56 [pool-2-thread-2] (ClientHandler.java:35) - Throwing
+java.net.SocketException: Connection reset
+	at java.net.SocketInputStream.read(SocketInputStream.java:210) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:141) ~[?:1.8.0_231]
+	at java.net.SocketInputStream.read(SocketInputStream.java:224) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUnsignedShort(DataInputStream.java:337) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:589) ~[?:1.8.0_231]
+	at java.io.DataInputStream.readUTF(DataInputStream.java:564) ~[?:1.8.0_231]
+	at com.geekbrains.chat.server.ClientHandler.servTetATetClient(ClientHandler.java:55) ~[classes/:?]
+	at com.geekbrains.chat.server.ClientHandler.lambda$new$0(ClientHandler.java:33) ~[classes/:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [?:1.8.0_231]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [?:1.8.0_231]
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_231]
